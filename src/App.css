@@ -1,0 +1,259 @@
+.App {
+  font-family: Arial, sans-serif;
+  text-align: center;
+  background-color: #f4f4f4;
+  padding: 20px;
+  overflow-x: hidden;
+  /* Prevent horizontal scrolling */
+}
+
+main {
+  display: flex;
+  margin: 1rem auto;
+  max-width: 1200px; /* Aligns with the width of ArticleList */
+}
+
+.header {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.search-bar {
+  margin: 20px auto;
+  padding: 10px 15px;
+  width: 1200px;
+  border: 1px solid #ddd;
+  position: relative;
+}
+
+.search-bar input {
+  flex: 1;
+  flex-grow: 1; /* Allows input to take available space */
+  padding: 10px;
+  border-radius: 20px 0 0 20px;
+  border: none;
+  outline: none;
+  height: 15px;
+}
+
+.search-bar button {
+  padding: 10px 15px;
+  border-radius: 0 20px 20px 0;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.search-bar form {
+  position: relative;
+  display: flex; /* Flex layout for better alignment */
+}
+
+.search-bar .clear-button {
+  position: absolute;
+  right: 80px; /* Adjust based on the search button size */
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent; /* Clear background */
+  border: none; /* No border */
+  cursor: pointer;
+  color: #999; /* Subtle color */
+  font-size: 18px; /* Slightly larger for visibility */
+  line-height: 1; /* Aligns the text properly */
+  outline: none; /* Removes outline for focus */
+}
+
+.search-bar .clear-button:hover {
+  color: #666; /* Darker color on hover for interaction feedback */
+}
+
+.search-bar input:focus {
+  outline: none; /* Removes the blue outline */
+}
+
+.search-bar, .search-bar form, .search-bar input, .search-bar button {
+  border: none; /* Ensures no borders are visible */
+  box-shadow: none; /* Removes any shadow effects */
+}
+
+
+.category-selector {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+.category-button {
+  margin: 0 10px;
+  padding: 10px 15px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.category-button:hover {
+  background-color: #0056b3;
+}
+
+.article {
+  position:relative;
+  background-color: white;
+  margin: 10px;
+  padding: 20px;
+  height: 300px;
+  width: calc(90% - 20px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* display: inline-block; */
+  vertical-align: top;
+  overflow: hidden;
+  background-color: rgba(169, 169, 169, 0.25); /* Grey with 30% opacity */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  
+  display: flex;
+    flex-direction: column; /* Stack children vertically */
+    justify-content: space-between; /* Distribute space evenly */
+}
+    
+.article h2{
+  font-size: 20px;
+}
+
+.article p {
+  white-space: normal;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 5em;  
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  width: 95%;
+  margin: auto;
+
+  display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+
+.article img {
+  max-height: 100px; /* Adjust as necessary */
+  width: auto;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.article-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  max-width: 1200px;
+  margin: 20px auto; /* Fixed margin with unit */
+}
+
+@media (max-width: 768px) {
+  .article-list {
+    grid-template-columns: 1fr; /* Activating media query */
+  }
+}
+
+.suggestions {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  max-height: none;
+  overflow-y: auto;
+}
+
+.suggestion-item {
+  padding: 10px;
+  cursor: pointer;
+  border-bottom: 1px solid #ccc;
+}
+
+.suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.suggestion-item:hover {
+  background-color: #eee;
+}
+
+.react-grid-item.react-grid-placeholder {
+  background: lightblue;
+}
+
+/* .like-button {
+  position: absolute;
+  top: 1rem; 
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+/* .like-icon {
+  width: 24px; 
+  height: 24px;
+  transition: fill 0.3s ease;
+  position: absolute;
+  top: -5px;
+  right: 10px;
+} */
+
+.like-button {
+  position: absolute;
+  top: 1rem; 
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.like-button:active {
+  transform: scale(0.95);
+}
+
+.like-icon {
+  /* existing styles */
+  width: 24px; 
+  height: 24px;
+  transition: fill 0.3s ease;
+  position: absolute;
+  top: -5px;
+  right: 10px;
+  transition: fill 0.3s ease;
+}
+
+.animate-scale {
+  animation: scaleAnimation 0.35s ease-in-out forwards;
+}
+
+@keyframes scaleAnimation {
+  0% { transform: scale(1); }
+  50% { transform: scale(2); }
+  100% { transform: scale(1); }
+}
+
+.drag-handle {
+  cursor: grab;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 75%; /* This will make the draggable area extend across the top */
+  height: 10%; /* Height of the draggable area as a percentage of the article div */
+  z-index: 10; /* Ensure it's above other elements */
+}
+

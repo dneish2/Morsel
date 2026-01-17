@@ -1,0 +1,63 @@
+name: Build and Deploy to Google Cloud Run
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: production
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      # We do not run a local build here because the Docker build will run the
+      # production build inside the container and must have REACT_APP_* build
+      # args available. The Docker image will be built and pushed from Actions
+      # with the required build args sourced from repository secrets.
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure gcloud
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.GCP_PROJECT }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+
+      - name: Configure docker with gcloud
+        run: |
+          gcloud auth configure-docker --quiet
+
+      - name: Build and push Docker image
+        env:
+          IMAGE: gcr.io/${{ secrets.GCP_PROJECT }}/morsel:${{ github.sha }}
+        run: |
+          docker build \
+            --build-arg REACT_APP_NEWSAPI_KEY="${{ secrets.REACT_APP_NEWSAPI_KEY }}" \
+            --build-arg REACT_APP_NEWSDATA_KEY="${{ secrets.REACT_APP_NEWSDATA_KEY }}" \
+            --build-arg REACT_APP_NEWSAPI_BASE_URL="${{ secrets.REACT_APP_NEWSAPI_BASE_URL }}" \
+            --build-arg REACT_APP_NEWSDATA_BASE_URL="${{ secrets.REACT_APP_NEWSDATA_BASE_URL }}" \
+            -t $IMAGE .
+          docker push $IMAGE
+
+      - name: Deploy to Cloud Run
+        run: |
+          IMAGE=gcr.io/${{ secrets.GCP_PROJECT }}/morsel:${{ github.sha }}
+          gcloud run deploy ${{ secrets.CLOUD_RUN_SERVICE }} \
+            --image $IMAGE \
+            --region ${{ secrets.GCP_REGION }} \
+            --platform managed \
+            --allow-unauthenticated \
+            --project ${{ secrets.GCP_PROJECT }}
